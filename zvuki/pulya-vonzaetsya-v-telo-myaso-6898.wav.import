@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/pulya-vonzaetsya-v-telo-myaso-6898.wav-1e21aa0754d97b1bf0bf27687a8bea85.sample"
+
+[deps]
+
+source_file="res://zvuki/pulya-vonzaetsya-v-telo-myaso-6898.wav"
+dest_files=[ "res://.import/pulya-vonzaetsya-v-telo-myaso-6898.wav-1e21aa0754d97b1bf0bf27687a8bea85.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
