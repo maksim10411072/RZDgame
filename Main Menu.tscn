@@ -1,0 +1,215 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://Control.gd" type="Script" id=1]
+[ext_resource path="res://govno/RussianRail A Pro OSF Dynamic BIG.tres" type="DynamicFont" id=2]
+[ext_resource path="res://govno/RussianRail A Pro OSF Dynamic Normal.tres" type="DynamicFont" id=3]
+[ext_resource path="res://gui shtuki/knopka v menu.tres" type="StyleBox" id=4]
+[ext_resource path="res://gui shtuki/pressed na knopke v menu.tres" type="StyleBox" id=5]
+[ext_resource path="res://gui shtuki/hover na knopke v menu.tres" type="StyleBox" id=6]
+[ext_resource path="res://ExitButton.gd" type="Script" id=7]
+[ext_resource path="res://AboutButton.gd" type="Script" id=8]
+[ext_resource path="res://govno/RussianRail A Pro OSF Dynamic About.tres" type="DynamicFont" id=9]
+[ext_resource path="res://govno/RussianRail A Pro OSF Dynamic About Title.tres" type="DynamicFont" id=10]
+[ext_resource path="res://PlayButton.gd" type="Script" id=11]
+[ext_resource path="res://Confirm.gd" type="Script" id=12]
+[ext_resource path="res://NotConfirm.gd" type="Script" id=13]
+[ext_resource path="res://gui shtuki/Popup Dialog StyleBox.tres" type="StyleBox" id=14]
+[ext_resource path="res://pashalka.gd" type="Script" id=15]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node2D
+func _ready():
+	OS.set_window_size(OS.get_screen_size())
+	#OS.set_window_position(Vector2(0, 0))
+	OS.set_window_maximized(true)
+
+func _process(delta):
+	pass
+	if Input.is_action_just_pressed(\"ui_cancel\"):
+		get_node(\"Camera2D/Control/ExitConfirm\").popup()
+	if Input.is_action_just_pressed(\"f11\"):
+		OS.window_fullscreen = !OS.window_fullscreen
+"
+
+[node name="Main Menu" type="Node2D"]
+script = SubResource( 1 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Control" type="Control" parent="Camera2D"]
+margin_right = 1024.0
+margin_bottom = 600.0
+script = ExtResource( 1 )
+
+[node name="Gamename" type="RichTextLabel" parent="Camera2D/Control"]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = 57.0
+margin_top = -48.0
+margin_right = 542.0
+margin_bottom = 47.0
+custom_fonts/normal_font = ExtResource( 2 )
+bbcode_enabled = true
+bbcode_text = "[color=red]R[color=green]Z[/color]D[/color] [color=black]Game[/color] "
+tab_size = 8
+text = "RZD Game "
+
+[node name="PlayButton" type="Button" parent="Camera2D/Control"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -291.0
+margin_top = -124.0
+margin_right = -90.0
+margin_bottom = -44.0
+custom_fonts/font = ExtResource( 3 )
+custom_styles/hover = ExtResource( 6 )
+custom_styles/pressed = ExtResource( 5 )
+custom_styles/normal = ExtResource( 4 )
+action_mode = 0
+text = "Играть"
+script = ExtResource( 11 )
+
+[node name="AboutButton" type="Button" parent="Camera2D/Control"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -291.0
+margin_top = -40.0
+margin_right = -90.0
+margin_bottom = 40.0
+custom_fonts/font = ExtResource( 3 )
+custom_styles/hover = ExtResource( 6 )
+custom_styles/pressed = ExtResource( 5 )
+custom_styles/normal = ExtResource( 4 )
+action_mode = 0
+text = "О Игре"
+script = ExtResource( 8 )
+
+[node name="ExitButton" type="Button" parent="Camera2D/Control"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -291.0
+margin_top = 44.0
+margin_right = -90.0
+margin_bottom = 124.0
+custom_fonts/font = ExtResource( 3 )
+custom_styles/hover = ExtResource( 6 )
+custom_styles/pressed = ExtResource( 5 )
+custom_styles/normal = ExtResource( 4 )
+text = "Выйти"
+script = ExtResource( 7 )
+
+[node name="WindowDialog" type="WindowDialog" parent="Camera2D/Control"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -333.0
+margin_top = -202.0
+margin_right = 333.0
+margin_bottom = 198.0
+custom_constants/close_h_ofs = 34
+custom_constants/title_height = 25
+custom_fonts/title_font = ExtResource( 10 )
+custom_styles/panel = ExtResource( 14 )
+window_title = "Information"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Camera2D/Control/WindowDialog"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -314.5
+margin_top = -169.0
+margin_right = 314.5
+margin_bottom = 169.0
+custom_fonts/normal_font = ExtResource( 9 )
+text = "
+Версия: 1.2
+Имя разработчика: Максим"
+
+[node name="ExitConfirm" type="WindowDialog" parent="Camera2D/Control"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -305.0
+margin_top = -190.0
+margin_right = 305.0
+margin_bottom = 190.0
+custom_constants/close_h_ofs = 35
+custom_fonts/title_font = ExtResource( 10 )
+custom_styles/panel = ExtResource( 14 )
+window_title = "Вы точно хотите выйти?"
+resizable = true
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Camera2D/Control/ExitConfirm"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -300.0
+margin_top = 55.0
+margin_right = 301.0
+margin_bottom = 183.0
+custom_fonts/normal_font = ExtResource( 9 )
+bbcode_enabled = true
+bbcode_text = "Вы точно хотите выйти?"
+text = "Вы точно хотите выйти?"
+
+[node name="Confirm" type="Button" parent="Camera2D/Control/ExitConfirm"]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = 19.0
+margin_top = 20.0
+margin_right = 220.0
+margin_bottom = 100.0
+custom_fonts/font = ExtResource( 3 )
+custom_styles/hover = ExtResource( 6 )
+custom_styles/pressed = ExtResource( 5 )
+custom_styles/normal = ExtResource( 4 )
+text = "Да"
+script = ExtResource( 12 )
+
+[node name="NotConfirm" type="Button" parent="Camera2D/Control/ExitConfirm"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -221.0
+margin_top = 17.0
+margin_right = -20.0
+margin_bottom = 97.0
+custom_fonts/font = ExtResource( 3 )
+custom_styles/hover = ExtResource( 6 )
+custom_styles/pressed = ExtResource( 5 )
+custom_styles/normal = ExtResource( 4 )
+text = "Нет"
+script = ExtResource( 13 )
+
+[node name="ToolButton" type="ToolButton" parent="Camera2D/Control"]
+self_modulate = Color( 1, 1, 1, 0 )
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -181.0
+margin_right = 181.0
+margin_bottom = 63.0
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color_focus = Color( 1, 0, 0, 1 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 1, 0, 0, 1 )
+custom_fonts/font = ExtResource( 3 )
+text = "Ты это нашёл!"
+script = ExtResource( 15 )
+
+[connection signal="pressed" from="Camera2D/Control/PlayButton" to="Camera2D/Control/PlayButton" method="_on_PlayButton_pressed"]
+[connection signal="pressed" from="Camera2D/Control/AboutButton" to="Camera2D/Control/AboutButton" method="_on_AboutButton_pressed"]
+[connection signal="pressed" from="Camera2D/Control/ExitButton" to="Camera2D/Control/ExitButton" method="_on_ExitButton_pressed"]
+[connection signal="pressed" from="Camera2D/Control/ExitConfirm/Confirm" to="Camera2D/Control/ExitConfirm/Confirm" method="_on_Confirm_pressed"]
+[connection signal="pressed" from="Camera2D/Control/ExitConfirm/NotConfirm" to="Camera2D/Control/ExitConfirm/NotConfirm" method="_on_NotConfirm_pressed"]
+[connection signal="mouse_entered" from="Camera2D/Control/ToolButton" to="Camera2D/Control/ToolButton" method="_on_ToolButton_mouse_entered"]
+[connection signal="mouse_exited" from="Camera2D/Control/ToolButton" to="Camera2D/Control/ToolButton" method="_on_ToolButton_mouse_exited"]

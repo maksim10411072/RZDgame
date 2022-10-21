@@ -1,0 +1,954 @@
+[gd_scene load_steps=24 format=2]
+
+[ext_resource path="res://textura.jpg" type="Texture" id=1]
+[ext_resource path="res://igrok.gd" type="Script" id=2]
+[ext_resource path="res://pricel.gd" type="Script" id=3]
+[ext_resource path="res://script menu.gd" type="Script" id=4]
+[ext_resource path="res://camerascrolling.gd" type="Script" id=5]
+[ext_resource path="res://pistoletigroka.png" type="Texture" id=6]
+[ext_resource path="res://rotation point.gd" type="Script" id=7]
+[ext_resource path="res://explosion point.gd" type="Script" id=8]
+[ext_resource path="res://bullet.tscn" type="PackedScene" id=9]
+[ext_resource path="res://zombie.tscn" type="PackedScene" id=10]
+[ext_resource path="res://spawner.tscn" type="PackedScene" id=11]
+[ext_resource path="res://health.gd" type="Script" id=12]
+[ext_resource path="res://reloading.gd" type="Script" id=13]
+[ext_resource path="res://circle.png" type="Texture" id=14]
+[ext_resource path="res://TIMER.gd" type="Script" id=15]
+[ext_resource path="res://zvuki/zvuk-odinochnogo-korotkogo-vyistrela.wav" type="AudioStream" id=16]
+[ext_resource path="res://TreeGenerator.tscn" type="PackedScene" id=17]
+[ext_resource path="res://Area2D.gd" type="Script" id=18]
+[ext_resource path="res://govno/RussianRail A Pro OSF Dynamic Normal.tres" type="DynamicFont" id=19]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+[sub_resource type="PhysicsMaterial" id=3]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 2.50005, 2.49986 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 7392.5, 1160.5 )
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource( 4 )
+
+[node name="TreeGenerator3" parent="." instance=ExtResource( 17 )]
+position = Vector2( 3914, 26 )
+scale = Vector2( 0.8, 0.8 )
+z_index = -4
+TimerI = 70
+TimerITREE = 600
+SpeedTREE = Vector2( -800, 0 )
+
+[node name="TreeGenerator" parent="." instance=ExtResource( 17 )]
+position = Vector2( 3913, 73 )
+scale = Vector2( 0.9, 0.9 )
+z_index = -4
+TimerI = 80
+TimerITREE = 600
+SpeedTREE = Vector2( -900, 0 )
+
+[node name="TreeGenerator2" parent="." instance=ExtResource( 17 )]
+position = Vector2( 3911, 120 )
+z_index = -1
+
+[node name="zombie" parent="." instance=ExtResource( 10 )]
+
+[node name="igrok" type="KinematicBody2D" parent="."]
+position = Vector2( 2578, -11 )
+script = ExtResource( 2 )
+
+[node name="pricel" type="Sprite" parent="igrok"]
+self_modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 27, 0 )
+z_index = 5
+texture = ExtResource( 1 )
+script = ExtResource( 3 )
+
+[node name="health" type="Sprite" parent="igrok/pricel"]
+self_modulate = Color( 0.14902, 1, 0, 1 )
+position = Vector2( -4, 0 )
+scale = Vector2( 0.5, 4 )
+texture = ExtResource( 1 )
+script = ExtResource( 12 )
+
+[node name="reloading" type="Sprite" parent="igrok/pricel"]
+self_modulate = Color( 0.968627, 1, 0, 1 )
+position = Vector2( 4, 0 )
+scale = Vector2( 0.5, 4 )
+texture = ExtResource( 1 )
+script = ExtResource( 13 )
+
+[node name="igrok" type="Sprite" parent="igrok"]
+modulate = Color( 0.560784, 0.560784, 0.560784, 1 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 1 )
+
+[node name="rotation point" type="Node2D" parent="igrok"]
+script = ExtResource( 7 )
+
+[node name="Pistoletigroka" type="Sprite" parent="igrok/rotation point"]
+position = Vector2( 5.747, 1.5 )
+texture = ExtResource( 6 )
+
+[node name="explosion point" type="Position2D" parent="igrok/rotation point/Pistoletigroka"]
+position = Vector2( 9.5, -2 )
+script = ExtResource( 8 )
+__meta__ = {
+"_gizmo_extents_": 1.6
+}
+Bullet = ExtResource( 9 )
+originaltimer = 0.5
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="igrok/rotation point/Pistoletigroka/explosion point"]
+stream = ExtResource( 16 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="igrok"]
+visible = false
+shape = SubResource( 1 )
+
+[node name="Area2D" type="Area2D" parent="igrok"]
+collision_layer = 16
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="igrok/Area2D"]
+visible = false
+shape = SubResource( 1 )
+
+[node name="maincamera" type="Camera2D" parent="igrok"]
+current = true
+smoothing_speed = 1.0
+script = ExtResource( 5 )
+
+[node name="raycastplayer" type="RayCast2D" parent="igrok"]
+enabled = true
+cast_to = Vector2( 0, 80 )
+
+[node name="poezd" type="StaticBody2D" parent="."]
+position = Vector2( 0, 96 )
+collision_layer = 11
+collision_mask = 11
+physics_material_override = SubResource( 3 )
+
+[node name="poezd" type="Sprite" parent="poezd"]
+modulate = Color( 0.588235, 0.588235, 0.588235, 1 )
+scale = Vector2( 140.733, 38.3034 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd8" type="Sprite" parent="poezd/poezd"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -1.97537, 3.13288 )
+scale = Vector2( 0.155, 0.085 )
+z_index = -1
+z_as_relative = false
+texture = ExtResource( 1 )
+
+[node name="Circle" type="Sprite" parent="poezd/poezd/poezd8"]
+show_behind_parent = true
+position = Vector2( -1.5127, -0.307159 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd/poezd/poezd8/Circle"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="Circle2" type="Sprite" parent="poezd/poezd/poezd8"]
+show_behind_parent = true
+position = Vector2( 1.55859, -0.307129 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd/poezd/poezd8/Circle2"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="poezd9" type="Sprite" parent="poezd/poezd"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( 1.97537, 3.13288 )
+scale = Vector2( 0.155, 0.085 )
+z_index = -1
+z_as_relative = false
+texture = ExtResource( 1 )
+
+[node name="Circle" type="Sprite" parent="poezd/poezd/poezd9"]
+show_behind_parent = true
+position = Vector2( -1.5127, -0.307159 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd/poezd/poezd9/Circle"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="Circle2" type="Sprite" parent="poezd/poezd/poezd9"]
+show_behind_parent = true
+position = Vector2( 1.55859, -0.307129 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd/poezd/poezd9/Circle2"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="poezd" type="Sprite" parent="poezd/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( -1.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd2" type="Sprite" parent="poezd/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( -0.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd3" type="Sprite" parent="poezd/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( 0.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd4" type="Sprite" parent="poezd/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( 1.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd5" type="Sprite" parent="poezd/poezd"]
+modulate = Color( 0.858824, 0.858824, 0.858824, 1 )
+position = Vector2( 0, -1.5 )
+scale = Vector2( 1, 0.059 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd6" type="Sprite" parent="poezd/poezd"]
+modulate = Color( 0.858824, 0.858824, 0.858824, 1 )
+position = Vector2( 0, 1.5 )
+scale = Vector2( 1, 0.059 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd7" type="Sprite" parent="poezd/poezd"]
+modulate = Color( 0.858824, 0.858824, 0.858824, 1 )
+scale = Vector2( 1, 0.059 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="poezd"]
+scale = Vector2( 140.733, 38.3034 )
+z_index = 6
+shape = SubResource( 2 )
+
+[node name="poezd4" type="StaticBody2D" parent="."]
+position = Vector2( 778, 96 )
+collision_layer = 11
+collision_mask = 11
+physics_material_override = SubResource( 3 )
+
+[node name="poezd" type="Sprite" parent="poezd4"]
+modulate = Color( 0.588235, 0.588235, 0.588235, 1 )
+scale = Vector2( 140.733, 38.3034 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd8" type="Sprite" parent="poezd4/poezd"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -1.97537, 3.13288 )
+scale = Vector2( 0.155, 0.085 )
+z_index = -1
+z_as_relative = false
+texture = ExtResource( 1 )
+
+[node name="Circle" type="Sprite" parent="poezd4/poezd/poezd8"]
+show_behind_parent = true
+position = Vector2( -1.5127, -0.307159 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd4/poezd/poezd8/Circle"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="Circle2" type="Sprite" parent="poezd4/poezd/poezd8"]
+show_behind_parent = true
+position = Vector2( 1.55859, -0.307129 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd4/poezd/poezd8/Circle2"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="poezd9" type="Sprite" parent="poezd4/poezd"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( 1.97537, 3.13288 )
+scale = Vector2( 0.155, 0.085 )
+z_index = -1
+z_as_relative = false
+texture = ExtResource( 1 )
+
+[node name="Circle" type="Sprite" parent="poezd4/poezd/poezd9"]
+show_behind_parent = true
+position = Vector2( -1.5127, -0.307159 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd4/poezd/poezd9/Circle"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="Circle2" type="Sprite" parent="poezd4/poezd/poezd9"]
+show_behind_parent = true
+position = Vector2( 1.55859, -0.307129 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd4/poezd/poezd9/Circle2"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="poezd" type="Sprite" parent="poezd4/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( -1.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd2" type="Sprite" parent="poezd4/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( -0.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd3" type="Sprite" parent="poezd4/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( 0.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd4" type="Sprite" parent="poezd4/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( 1.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd5" type="Sprite" parent="poezd4/poezd"]
+modulate = Color( 0.858824, 0.858824, 0.858824, 1 )
+position = Vector2( 0, -1.5 )
+scale = Vector2( 1, 0.059 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd6" type="Sprite" parent="poezd4/poezd"]
+modulate = Color( 0.858824, 0.858824, 0.858824, 1 )
+position = Vector2( 0, 1.5 )
+scale = Vector2( 1, 0.059 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd7" type="Sprite" parent="poezd4/poezd"]
+modulate = Color( 0.858824, 0.858824, 0.858824, 1 )
+scale = Vector2( 1, 0.059 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="poezd4"]
+scale = Vector2( 140.733, 38.3034 )
+z_index = 6
+shape = SubResource( 2 )
+
+[node name="poezd5" type="StaticBody2D" parent="."]
+position = Vector2( 1541, 96 )
+collision_layer = 11
+collision_mask = 11
+physics_material_override = SubResource( 3 )
+
+[node name="poezd" type="Sprite" parent="poezd5"]
+modulate = Color( 0.588235, 0.588235, 0.588235, 1 )
+scale = Vector2( 140.733, 38.3034 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd8" type="Sprite" parent="poezd5/poezd"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -1.97537, 3.13288 )
+scale = Vector2( 0.155, 0.085 )
+z_index = -1
+z_as_relative = false
+texture = ExtResource( 1 )
+
+[node name="Circle" type="Sprite" parent="poezd5/poezd/poezd8"]
+show_behind_parent = true
+position = Vector2( -1.5127, -0.307159 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd5/poezd/poezd8/Circle"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="Circle2" type="Sprite" parent="poezd5/poezd/poezd8"]
+show_behind_parent = true
+position = Vector2( 1.55859, -0.307129 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd5/poezd/poezd8/Circle2"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="poezd9" type="Sprite" parent="poezd5/poezd"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( 1.97537, 3.13288 )
+scale = Vector2( 0.155, 0.085 )
+z_index = -1
+z_as_relative = false
+texture = ExtResource( 1 )
+
+[node name="Circle" type="Sprite" parent="poezd5/poezd/poezd9"]
+show_behind_parent = true
+position = Vector2( -1.5127, -0.307159 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd5/poezd/poezd9/Circle"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="Circle2" type="Sprite" parent="poezd5/poezd/poezd9"]
+show_behind_parent = true
+position = Vector2( 1.55859, -0.307129 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd5/poezd/poezd9/Circle2"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="poezd" type="Sprite" parent="poezd5/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( -1.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd2" type="Sprite" parent="poezd5/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( -0.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd3" type="Sprite" parent="poezd5/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( 0.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd4" type="Sprite" parent="poezd5/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( 1.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd5" type="Sprite" parent="poezd5/poezd"]
+modulate = Color( 0.858824, 0.858824, 0.858824, 1 )
+position = Vector2( 0, -1.5 )
+scale = Vector2( 1, 0.059 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd6" type="Sprite" parent="poezd5/poezd"]
+modulate = Color( 0.858824, 0.858824, 0.858824, 1 )
+position = Vector2( 0, 1.5 )
+scale = Vector2( 1, 0.059 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd7" type="Sprite" parent="poezd5/poezd"]
+modulate = Color( 0.858824, 0.858824, 0.858824, 1 )
+scale = Vector2( 1, 0.059 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="poezd5"]
+scale = Vector2( 140.733, 38.3034 )
+z_index = 6
+shape = SubResource( 2 )
+
+[node name="poezd6" type="StaticBody2D" parent="."]
+position = Vector2( 2305, 96 )
+collision_layer = 11
+collision_mask = 11
+physics_material_override = SubResource( 3 )
+
+[node name="poezd" type="Sprite" parent="poezd6"]
+modulate = Color( 0.588235, 0.588235, 0.588235, 1 )
+scale = Vector2( 140.733, 38.3034 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd8" type="Sprite" parent="poezd6/poezd"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -1.97537, 3.13288 )
+scale = Vector2( 0.155, 0.085 )
+z_index = -1
+z_as_relative = false
+texture = ExtResource( 1 )
+
+[node name="Circle" type="Sprite" parent="poezd6/poezd/poezd8"]
+show_behind_parent = true
+position = Vector2( -1.5127, -0.307159 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd6/poezd/poezd8/Circle"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="Circle2" type="Sprite" parent="poezd6/poezd/poezd8"]
+show_behind_parent = true
+position = Vector2( 1.55859, -0.307129 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd6/poezd/poezd8/Circle2"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="poezd9" type="Sprite" parent="poezd6/poezd"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( 1.97537, 3.13288 )
+scale = Vector2( 0.155, 0.085 )
+z_index = -1
+z_as_relative = false
+texture = ExtResource( 1 )
+
+[node name="Circle" type="Sprite" parent="poezd6/poezd/poezd9"]
+show_behind_parent = true
+position = Vector2( -1.5127, -0.307159 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd6/poezd/poezd9/Circle"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="Circle2" type="Sprite" parent="poezd6/poezd/poezd9"]
+show_behind_parent = true
+position = Vector2( 1.55859, -0.307129 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd6/poezd/poezd9/Circle2"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="poezd" type="Sprite" parent="poezd6/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( -1.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd2" type="Sprite" parent="poezd6/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( -0.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd3" type="Sprite" parent="poezd6/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( 0.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd4" type="Sprite" parent="poezd6/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( 1.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd5" type="Sprite" parent="poezd6/poezd"]
+modulate = Color( 0.858824, 0.858824, 0.858824, 1 )
+position = Vector2( 0, -1.5 )
+scale = Vector2( 1, 0.059 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd6" type="Sprite" parent="poezd6/poezd"]
+modulate = Color( 0.858824, 0.858824, 0.858824, 1 )
+position = Vector2( 0, 1.5 )
+scale = Vector2( 1, 0.059 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd7" type="Sprite" parent="poezd6/poezd"]
+modulate = Color( 0.858824, 0.858824, 0.858824, 1 )
+scale = Vector2( 1, 0.059 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="poezd6"]
+scale = Vector2( 140.733, 38.3034 )
+z_index = 6
+shape = SubResource( 2 )
+
+[node name="poezd2" type="StaticBody2D" parent="."]
+position = Vector2( -769, 96 )
+collision_layer = 11
+collision_mask = 11
+physics_material_override = SubResource( 3 )
+
+[node name="poezd" type="Sprite" parent="poezd2"]
+modulate = Color( 0.588235, 0.588235, 0.588235, 1 )
+scale = Vector2( 140.733, 38.3034 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd8" type="Sprite" parent="poezd2/poezd"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -1.97537, 3.13288 )
+scale = Vector2( 0.155, 0.085 )
+z_index = -1
+z_as_relative = false
+texture = ExtResource( 1 )
+
+[node name="Circle" type="Sprite" parent="poezd2/poezd/poezd8"]
+show_behind_parent = true
+position = Vector2( -1.5127, -0.307159 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd2/poezd/poezd8/Circle"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="Circle2" type="Sprite" parent="poezd2/poezd/poezd8"]
+show_behind_parent = true
+position = Vector2( 1.55859, -0.307129 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd2/poezd/poezd8/Circle2"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="poezd9" type="Sprite" parent="poezd2/poezd"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( 1.97537, 3.13288 )
+scale = Vector2( 0.155, 0.085 )
+z_index = -1
+z_as_relative = false
+texture = ExtResource( 1 )
+
+[node name="Circle" type="Sprite" parent="poezd2/poezd/poezd9"]
+show_behind_parent = true
+position = Vector2( -1.5127, -0.307159 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd2/poezd/poezd9/Circle"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="Circle2" type="Sprite" parent="poezd2/poezd/poezd9"]
+show_behind_parent = true
+position = Vector2( 1.55859, -0.307129 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd2/poezd/poezd9/Circle2"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="poezd" type="Sprite" parent="poezd2/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( -1.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd2" type="Sprite" parent="poezd2/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( -0.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd3" type="Sprite" parent="poezd2/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( 0.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd4" type="Sprite" parent="poezd2/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( 1.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd5" type="Sprite" parent="poezd2/poezd"]
+modulate = Color( 0.858824, 0.858824, 0.858824, 1 )
+position = Vector2( 0, -1.5 )
+scale = Vector2( 1, 0.059 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd6" type="Sprite" parent="poezd2/poezd"]
+modulate = Color( 0.858824, 0.858824, 0.858824, 1 )
+position = Vector2( 0, 1.5 )
+scale = Vector2( 1, 0.059 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd7" type="Sprite" parent="poezd2/poezd"]
+modulate = Color( 0.858824, 0.858824, 0.858824, 1 )
+scale = Vector2( 1, 0.059 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="poezd2"]
+visible = false
+scale = Vector2( 140.733, 38.3034 )
+z_index = 6
+shape = SubResource( 2 )
+
+[node name="poezd3" type="StaticBody2D" parent="."]
+position = Vector2( -1540, 96 )
+collision_layer = 11
+collision_mask = 11
+physics_material_override = SubResource( 3 )
+
+[node name="poezd" type="Sprite" parent="poezd3"]
+modulate = Color( 0.588235, 0.588235, 0.588235, 1 )
+scale = Vector2( 140.733, 38.3034 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd8" type="Sprite" parent="poezd3/poezd"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -1.97537, 3.13288 )
+scale = Vector2( 0.155, 0.085 )
+z_index = -1
+z_as_relative = false
+texture = ExtResource( 1 )
+
+[node name="Circle" type="Sprite" parent="poezd3/poezd/poezd8"]
+show_behind_parent = true
+position = Vector2( -1.5127, -0.307159 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd3/poezd/poezd8/Circle"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="Circle2" type="Sprite" parent="poezd3/poezd/poezd8"]
+show_behind_parent = true
+position = Vector2( 1.55859, -0.307129 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd3/poezd/poezd8/Circle2"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="poezd9" type="Sprite" parent="poezd3/poezd"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( 1.97537, 3.13288 )
+scale = Vector2( 0.155, 0.085 )
+z_index = -1
+z_as_relative = false
+texture = ExtResource( 1 )
+
+[node name="Circle" type="Sprite" parent="poezd3/poezd/poezd9"]
+show_behind_parent = true
+position = Vector2( -1.5127, -0.307159 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd3/poezd/poezd9/Circle"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="Circle2" type="Sprite" parent="poezd3/poezd/poezd9"]
+show_behind_parent = true
+position = Vector2( 1.55859, -0.307129 )
+scale = Vector2( 0.0189351, 0.126864 )
+texture = ExtResource( 14 )
+
+[node name="poezd9" type="Sprite" parent="poezd3/poezd/poezd9/Circle2"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( -0.00537109, -41.1577 )
+scale = Vector2( 7.60492, 10.8147 )
+texture = ExtResource( 1 )
+
+[node name="poezd" type="Sprite" parent="poezd3/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( -1.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd2" type="Sprite" parent="poezd3/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( -0.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd3" type="Sprite" parent="poezd3/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( 0.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd4" type="Sprite" parent="poezd3/poezd"]
+modulate = Color( 0.823529, 0.823529, 0.823529, 1 )
+position = Vector2( 1.5, 0.262302 )
+scale = Vector2( 0.037, 1.097 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd5" type="Sprite" parent="poezd3/poezd"]
+modulate = Color( 0.858824, 0.858824, 0.858824, 1 )
+position = Vector2( 0, -1.5 )
+scale = Vector2( 1, 0.059 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd6" type="Sprite" parent="poezd3/poezd"]
+modulate = Color( 0.858824, 0.858824, 0.858824, 1 )
+position = Vector2( 0, 1.5 )
+scale = Vector2( 1, 0.059 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="poezd7" type="Sprite" parent="poezd3/poezd"]
+modulate = Color( 0.858824, 0.858824, 0.858824, 1 )
+scale = Vector2( 1, 0.059 )
+z_index = 6
+texture = ExtResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="poezd3"]
+visible = false
+scale = Vector2( 140.733, 38.3034 )
+z_index = 6
+shape = SubResource( 2 )
+
+[node name="spawner" parent="." instance=ExtResource( 11 )]
+position = Vector2( 2206, -10 )
+
+[node name="spawner2" parent="." instance=ExtResource( 11 )]
+position = Vector2( 1568, -10 )
+
+[node name="spawner3" parent="." instance=ExtResource( 11 )]
+position = Vector2( -984, -10 )
+
+[node name="earth2" type="Sprite" parent="."]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( 421, 240 )
+scale = Vector2( 2956.8, 3.847 )
+texture = ExtResource( 1 )
+
+[node name="earth" type="Sprite" parent="."]
+modulate = Color( 0.419608, 0.709804, 0.301961, 1 )
+position = Vector2( 464, 1343.63 )
+scale = Vector2( 2962.4, 488.65 )
+z_index = -10
+texture = ExtResource( 1 )
+
+[node name="Area2D" type="Area2D" parent="."]
+script = ExtResource( 18 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 456.5, 1406.5 )
+shape = SubResource( 4 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Label" type="Label" parent="CanvasLayer/Control"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -63.0
+margin_right = 292.0
+custom_fonts/font = ExtResource( 19 )
+text = "0 Секунд"
+script = ExtResource( 15 )
+
+[node name="Timer" type="Timer" parent="CanvasLayer/Control/Label"]
+wait_time = 0.1
+autostart = true
+
+[connection signal="area_entered" from="igrok/Area2D" to="igrok" method="_damag_po_igroku"]
+[connection signal="body_entered" from="Area2D" to="Area2D" method="_on_Area2D_body_entered"]
+[connection signal="timeout" from="CanvasLayer/Control/Label/Timer" to="CanvasLayer/Control/Label" method="_on_Timer_timeout"]
